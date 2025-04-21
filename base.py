@@ -21,7 +21,7 @@ logging.basicConfig(
     format='%(asctime)s %(levelname)s %(message)s',
     datefmt='%Y-%m-%dT%H:%M:%S'
 )
-logger = logging.getLogger("agent")
+logger = logging.getLogger("core")
 
 # --- Utils and Exceptions ---
 def raise_if_blank(args:dict):
