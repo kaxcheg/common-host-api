@@ -91,7 +91,7 @@ class BaseScraping(ABC):
         })
         logger.info("Selenium WebDriver started.")
 
-    def authorize(self):
+    def authenticate_and_setup(self):
         """
         Unified method to start Selenium session and perform login explicitly.
         Should be called manually after instantiation.
