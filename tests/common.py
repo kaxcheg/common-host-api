@@ -53,18 +53,3 @@ def read_private_data(key):
             secrets = json.load(f)
 
     return secrets[key]
-
-class BasicAirbnbTesting(unittest.TestCase):
-    @classmethod
-    def read_private_data_to_class(cls, *args):
-        with open(PRIVATE_DATA_FILE_PATH, "r") as f:
-                secrets = json.load(f)
-
-        for arg in args:
-             setattr(cls, arg, secrets[arg])
- 
-    def basic_assert_auth_data(self, auth_token_value, api_key_value):  
-        self.assertTrue(auth_token_value, "auth_token should not be blank")
-        self.assertTrue(api_key_value, "api_key should not be blank")
-        self.assertIsInstance(auth_token_value, dict, "auth_token should be a dict")
-        self.assertIsInstance(api_key_value, str, "api_key should be an string")
