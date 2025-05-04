@@ -1,0 +1,2 @@
+filelock==3.18.0
+selenium==4.32.0
