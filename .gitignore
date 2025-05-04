@@ -184,3 +184,7 @@ tests/private_data.json
 
 #temp
 temp/
+
+#logs
+logs/
+log/
