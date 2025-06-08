@@ -24,6 +24,15 @@ logging.basicConfig(
 logger = logging.getLogger("scraper")
 
 # --- Utils and Exceptions ---
+def mask_email_prefix(s: str) -> str:
+    if not s:
+        return None
+    prefix, domain = s.split('@', 1)
+    if len(prefix) < 4:
+        return s
+    masked = prefix[:3] + '*****' + prefix[-1]
+    return f"{masked}@{domain}"
+
 def raise_if_blank(args:dict):
     for arg_name, arg in args.items():
         if not arg:
@@ -70,7 +79,7 @@ class BaseScraping(ABC):
         self._browser_args = browser_args
         self._page_load_strategy = page_load_strategy
         self._driver = None
-        logger.info("Instance initialized for %s", self._email or 'TOKEN-based session')
+        logger.info("Instance initialized for %s", mask_email_prefix(self._email) or 'TOKEN-based session')
 
     def _init_driver(self):
         options = Options()
@@ -96,13 +105,13 @@ class BaseScraping(ABC):
         Unified method to start Selenium session and perform login explicitly.
         Should be called manually after instantiation.
         """
-        logger.info("Authorization started for %s", self._email or 'TOKEN-based session')
+        logger.info("Authorization started for %s", mask_email_prefix(self._email) or 'TOKEN-based session')
         self._init_driver()
         try:
             self._login()
-            logger.info("Authorization successful for %s", self._email or 'TOKEN-based session')
+            logger.info("Authorization successful for %s", mask_email_prefix(self._email) or 'TOKEN-based session')
         except Exception as e:
-            logger.exception("Authorization failed for %s", self._email or 'TOKEN-based session')
+            logger.exception("Authorization failed for %s", mask_email_prefix(self._email) or 'TOKEN-based session')
             raise
         finally:
             self._driver.quit()
