@@ -112,6 +112,17 @@ class BaseScraping(ABC):
     def _login(self):
         """Stub method. Implement this method in child class."""
         pass
+    
+    def _hide_locator(self, locator, timeout) -> None:
+            driver = self._driver
+            try:
+                cookie_window = WebDriverWait(driver, timeout).until(
+                    EC.presence_of_element_located(locator)
+                    )
+            except TimeoutException as e:
+                raise_scraping_error(locator, e)
+            
+            driver.execute_script("arguments[0].style.display = 'none';", cookie_window)
 
     def _is_locator_found(self, locator: tuple, timeout: float) -> bool:
         try:
