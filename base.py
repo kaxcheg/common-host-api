@@ -11,9 +11,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
 # --- Logging setup ---
-LOG_DIR = os.environ.get("AGENT_LOG_DIR", "./logs")
+LOG_DIR = os.environ.get("AIRBOOK_SCRAPER_LOG_DIR", "./logs")
 os.makedirs(LOG_DIR, exist_ok=True)
-LOG_FILE = os.path.join(LOG_DIR, "core.log")
+LOG_FILE = os.path.join(LOG_DIR, "scraper.log")
 
 logging.basicConfig(
     filename=LOG_FILE,
@@ -21,7 +21,7 @@ logging.basicConfig(
     format='%(asctime)s %(levelname)s %(message)s',
     datefmt='%Y-%m-%dT%H:%M:%S'
 )
-logger = logging.getLogger("core")
+logger = logging.getLogger("scraper")
 
 # --- Utils and Exceptions ---
 def raise_if_blank(args:dict):
