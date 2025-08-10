@@ -1,0 +1,29 @@
+[project]
+name = "common-host-api"
+version = "0.1.0"
+description = "Base Selenium helper for automated login flow"
+authors = [
+    {name = "kaxcheg",email = "kaxcheg@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+
+
+[tool.poetry.dependencies]
+python = "^3.12"
+selenium = ">=4.25"
+requests = ">=2.32.3"
+
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.17.1"
+filelock = "^3.18.0"
+
+
+[tool.poetry]
+package-mode = false
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
