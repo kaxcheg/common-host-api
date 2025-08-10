@@ -24,7 +24,7 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s %(message)s",
     datefmt="%Y-%m-%dT%H:%M:%S",
 )
-logger = logging.getLogger("core")
+logger = logging.getLogger("scraper")
 
 
 class InvalidParameterError(Exception):
@@ -38,6 +38,17 @@ class AuthenticationError(Exception):
 class ScrapingError(Exception):
     """Represents scraping failure error."""
 
+def mask_email_prefix(s: str | None) -> str:
+    if not s:
+        return ""
+    if "@" in s:
+        prefix, domain = s.split('@', 1)
+    else:
+        prefix, domain = s, ""
+    if len(prefix) < 4:
+        return s
+    masked = prefix[:3] + '*****' + prefix[-1]
+    return f"{masked}@{domain}"
 
 def raise_if_blank(args: dict[str, object]) -> None:
     """Raise if any provided argument is blank or falsy.
@@ -118,7 +129,7 @@ class BaseScraping(ABC):
         self._browser_args = browser_args
         self._page_load_strategy = page_load_strategy
         self._driver: WebDriver | None = None
-        logger.info("Instance initialized for %s", self._email or "TOKEN-based session")
+        logger.info("Instance initialized for %s", mask_email_prefix(self._email) or 'TOKEN-based session')
 
     def _init_driver(self) -> None:
         """Create and configure Chrome WebDriver instance.
@@ -164,20 +175,15 @@ class BaseScraping(ABC):
         Returns:
             None
         """
-        logger.info("Authorization started for %s", self._email or "TOKEN-based session")
+        logger.info("Authorization started for %s", mask_email_prefix(self._email) or 'TOKEN-based session')
         self._init_driver()
         assert self._driver is not None
 
         try:
             self._login(self._driver)
-            logger.info(
-                "Authorization successful for %s",
-                self._email or "TOKEN-based session",
-            )
-        except Exception:
-            logger.exception(
-                "Authorization failed for %s", self._email or "TOKEN-based session"
-            )
+            logger.info("Authorization successful for %s", mask_email_prefix(self._email) or 'TOKEN-based session')
+        except Exception as e:
+            logger.exception("Authorization failed for %s", mask_email_prefix(self._email) or 'TOKEN-based session')
             raise
         finally:
             self._driver.quit()
