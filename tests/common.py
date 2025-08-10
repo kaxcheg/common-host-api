@@ -80,7 +80,7 @@ def write_private_data_to_file(**kwargs) -> None:
         with open(PRIVATE_DATA_FILE_PATH, 'w') as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
 
-def read_private_data(key: str) -> object:
+def read_private_data(key: str) -> list[dict]:
     """Return a value from tests/private_data.json by key.
 
     Args:
